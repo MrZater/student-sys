@@ -1,0 +1,27 @@
+{
+  "name": "student-sys",
+  "version": "1.0.0",
+  "description": "<!--  * @Author: zt zhoutao@ydmob.com  * @Date: 2024-02-05 18:17:39  * @LastEditors: zt zhoutao@ydmob.com  * @LastEditTime: 2024-02-05 18:37:51  * @FilePath: /student-sys/README.md  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%A --> # http模块",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rd /s /q dist & tsc",
+    "dev": "nodemon --watch src -e ts --exec ts-node src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrZater/student-sys.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MrZater/student-sys/issues"
+  },
+  "homepage": "https://github.com/MrZater/student-sys#readme",
+  "dependencies": {
+    "@types/node": "^20.11.16",
+    "mysql2": "^3.9.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.12"
+  }
+}
