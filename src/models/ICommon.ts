@@ -2,7 +2,7 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-02-06 17:25:41
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-02-06 18:28:29
+ * @LastEditTime: 2024-02-07 12:54:19
  * @FilePath: /student-sys/src/models/ICommon.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -43,6 +43,7 @@ export interface IStudent {
     birthday: Date
     sex: boolean
     mobile: string
+    address: string
     id?: number
 }
 export interface IStudentModel extends Model<IStudent>, IStudent { }
