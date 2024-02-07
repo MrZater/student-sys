@@ -2,7 +2,7 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-02-05 18:17:39
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-02-05 18:37:51
+ * @LastEditTime: 2024-02-07 11:04:05
  * @FilePath: /student-sys/README.md
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%A
 -->
@@ -15,3 +15,9 @@
 
 1. express
 2. koa2
+
+一个完整的系统，最重要的验证，一定是在服务器端
+
+1. 客户端（浏览器、app、pad、小程序）：用户体验
+2. 服务器端逻辑验证（业务逻辑层的验证）：为了业务逻辑性的安全性、完整性
+3. 数据库验证：为了保证数据完整性

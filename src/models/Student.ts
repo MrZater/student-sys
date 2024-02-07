@@ -2,15 +2,16 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-02-06 16:38:43
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-02-06 17:02:31
+ * @LastEditTime: 2024-02-06 18:30:46
  * @FilePath: /student-sys/src/models/Student.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 import { DataTypes, ModelAttributes, ModelOptions } from 'sequelize'
 import { sequelize } from './db'
+import {IStudent, IStudentModel} from './ICommon'
 
 // 模型字段
-const attributes: ModelAttributes = {
+const attributes: ModelAttributes<IStudentModel, IStudent> = {
     name: {
         type: DataTypes.STRING,
         allowNull: false
@@ -38,6 +39,6 @@ const options: ModelOptions = {
     paranoid: true
 }
 
-const Student = sequelize.define('student', attributes, options)
+const Student = sequelize.define<IStudentModel>('student', attributes, options)
 export default Student
 
