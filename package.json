@@ -19,8 +19,11 @@
   },
   "homepage": "https://github.com/MrZater/student-sys#readme",
   "dependencies": {
+    "@types/axios": "^0.14.0",
     "@types/mockjs": "^1.0.10",
     "@types/node": "^20.11.16",
+    "axios": "^1.6.7",
+    "cheerio": "^1.0.0-rc.12",
     "mockjs": "^1.1.0",
     "mysql2": "^3.9.1",
     "sequelize": "^6.36.0",
