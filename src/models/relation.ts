@@ -7,8 +7,8 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 // 设置模型关系
-import Class from "./Class";
-import Student from "./Student";
-Class.hasMany(Student);
-Student.belongsTo(Class);
+import ClassSchema from "./Class";
+import StudentSchema from "./Student";
+ClassSchema.hasMany(StudentSchema);
+StudentSchema.belongsTo(ClassSchema);
 

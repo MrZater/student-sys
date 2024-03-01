@@ -8,7 +8,7 @@
  */
 
 import Mock from "mockjs";
-import Student from "../models/Student";
+import StudentSchema from "../models/Student";
 const mock = Mock.mock({
    "datas|500-800": [{
     "name": '@cname',
@@ -20,4 +20,4 @@ const mock = Mock.mock({
    }]
 }).datas
 console.log(mock);
-Student.bulkCreate(mock)
+StudentSchema.bulkCreate(mock)

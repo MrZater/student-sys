@@ -2,34 +2,39 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-02-07 11:52:07
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-02-22 15:44:25
+ * @LastEditTime: 2024-03-01 17:38:39
  * @FilePath: /student-sys/src/services/StudentService.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 
 
 import { Op, WhereOptions } from "sequelize";
-import { IClass, IStudent } from "../models/ICommon";
-import Student from "../models/Student";
+import { Class, Student } from "../entities/ICommon";
+import StudentSchema from "../models/Student";
 import { ICommonFun } from "./IService";
-import Class from "../models/Class";
+import ClassSchema from "../models/Class";
+import validate from 'validate.js'
+import { studentValidator } from "../entities/validate";
+import {pick} from '../util/propertyHelper'
 
 /**
  * 学生列表项接口
  */
-interface IStudentListItem extends IStudent {
-    class: IClass
+interface IStudentListItem extends Student {
+    class: Class
 }
 
-class StudentService implements ICommonFun<IStudent> {
+class StudentService implements ICommonFun<Student> {
     /**
      * 添加学生
      * 
      * @param {any} student 
      * @returns 
      */
-    async add(student) {
-        const ins = await Student.create(student)
+    async add(student: Student) {
+        student = pick(student, ['name', 'address', 'mobile', 'sex', 'birthday', 'classId'])
+        await validate.async(student, studentValidator)
+        const ins = await StudentSchema.create(student)
         return ins.toJSON()
     }
 
@@ -41,7 +46,7 @@ class StudentService implements ICommonFun<IStudent> {
     * */
     async delete(id) {
         // 直接删除
-        const result = await Student.destroy({
+        const result = await StudentSchema.destroy({
             where: {
                 id
             }
@@ -50,14 +55,16 @@ class StudentService implements ICommonFun<IStudent> {
     }
 
     /**
-     * 删除学生
+     * 修改学生
      * @param id 
      * @param student 
      * @returns 
      */
     async update(id, student) {
+        student = pick(student, ['name', 'address', 'mobile', 'sex', 'birthday', 'classId'])
+        await validate.async(student, studentValidator)
         // 直接修改
-        const result = await Student.update(student, {
+        const result = await StudentSchema.update(student, {
             where: {
                 id
             }
@@ -77,9 +84,9 @@ class StudentService implements ICommonFun<IStudent> {
         items: Array<IStudentListItem>
     }> {
         // 指定查询字段
-        const attributes: Array<keyof IStudent> = ['id', 'name', 'address', 'birthday', 'mobile', 'sex']
+        const attributes: Array<keyof Student> = ['id', 'name', 'address', 'birthday', 'mobile', 'sex']
         // 指定查询条件
-        let whereObj: WhereOptions<IStudent> = {}
+        let whereObj: WhereOptions<Student> = {}
         if (sex !== -1) {
             whereObj = {
                 sex: !!sex
@@ -93,13 +100,13 @@ class StudentService implements ICommonFun<IStudent> {
                 }
             }
         }
-        const resp = await Student.findAndCountAll({
+        const resp = await StudentSchema.findAndCountAll({
             offset: (page - 1) * limit,
             limit,
             where: whereObj,
             attributes,
             // 联查
-            include: [Class]
+            include: [ClassSchema]
         })
         return {
             total: resp.count,
@@ -112,11 +119,11 @@ class StudentService implements ICommonFun<IStudent> {
      * @returns 
      */
     async getStudentById(id: number): Promise<IStudentListItem | null> {
-        const resp = await Student.findOne({
+        const resp = await StudentSchema.findOne({
             where: {
                 id
             },
-            include: [Class]
+            include: [ClassSchema]
         })
         if (resp) {
             return resp.toJSON() as IStudentListItem

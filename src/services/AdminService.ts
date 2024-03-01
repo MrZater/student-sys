@@ -2,26 +2,31 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-02-06 17:18:36
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-02-22 16:56:35
+ * @LastEditTime: 2024-03-01 17:37:53
  * @FilePath: /student-sys/src/services/AdminService.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 
-import { IAdmin } from "../models/ICommon";
+import { Admin } from "../entities/ICommon";
 import { ICommonFun } from "./IService";
-import Admin from "../models/admin";
+import AdminSchema from "../models/admin";
 import { Op } from "sequelize";
 import md5 from "md5";
-class AdminService implements ICommonFun<IAdmin>  {
+import validate from "validate.js";
+import { adminValidator } from "../entities/validate";
+import { pick } from "../util/propertyHelper";
+class AdminService implements ICommonFun<Admin>  {
     /**
      * 添加管理员
      * 
      * @param {any} admin 
      * @returns 
      */
-    async add(admin:IAdmin):Promise<IAdmin> {
+    async add(admin:Admin):Promise<Admin> {
+        admin = pick(admin, ['loginId', 'loginPwd', 'name'])
+        await validate.async(admin, adminValidator)
         admin.loginPwd = md5(admin.loginPwd)
-        const ins = await Admin.create(admin)
+        const ins = await AdminSchema.create(admin)
         return ins.toJSON()
     }
 
@@ -33,7 +38,7 @@ class AdminService implements ICommonFun<IAdmin>  {
     * */
     async delete(id) {
         // 直接删除
-        const result = await Admin.destroy({
+        const result = await AdminSchema.destroy({
             where: {
                 id
             }
@@ -41,20 +46,27 @@ class AdminService implements ICommonFun<IAdmin>  {
         return result
     }
 
-
+    /**
+     * 修改管理员
+     * @param id 
+     * @param admin 
+     * @returns 
+     */
     async update(id, admin):Promise<number[]> {
+        admin = pick(admin, ['loginId', 'loginPwd', 'name'])
+        await validate.async(admin, adminValidator)
         admin.loginPwd = md5(admin.loginPwd)
         // 直接修改
-        const result = await Admin.update(admin, {
+        const result = await AdminSchema.update(admin, {
             where: {
                 id
             }
         })
         return result
     }
-    async login (loginId, loginPwd):Promise<IAdmin | null>  {
+    async login (loginId, loginPwd):Promise<Admin | null>  {
         loginPwd = md5(loginPwd)
-        const resp = await Admin.findOne({
+        const resp = await AdminSchema.findOne({
             where: {
                 loginId,
                 loginPwd
@@ -66,8 +78,8 @@ class AdminService implements ICommonFun<IAdmin>  {
         }
         return null
     }
-    async getAdminById (id:string | number):Promise<IAdmin | null> {
-        const resp = await Admin.findOne({
+    async getAdminById (id:string | number):Promise<Admin | null> {
+        const resp = await AdminSchema.findOne({
             where: {
                 id
             }
@@ -79,9 +91,9 @@ class AdminService implements ICommonFun<IAdmin>  {
     }
     async getAdminList (page: number = 1, limit: number= 10, name: string = ''):Promise<{
         total: number
-        items: IAdmin[]
+        items: Admin[]
     }> {
-        const resp = await Admin.findAndCountAll({
+        const resp = await AdminSchema.findAndCountAll({
             offset: (page - 1) * limit,
             limit,
             where: {

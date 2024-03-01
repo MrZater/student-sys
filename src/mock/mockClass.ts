@@ -8,7 +8,7 @@
  */
 
 import Mock from "mockjs";
-import Class from "../models/Class";
+import ClassSchema from "../models/Class";
 const mock = Mock.mock({
    "datas|3-10": [{
     "id|+1":1, 
@@ -17,4 +17,4 @@ const mock = Mock.mock({
    }]
 }).datas
 console.log(mock);
-Class.bulkCreate(mock)
+ClassSchema.bulkCreate(mock)
