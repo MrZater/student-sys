@@ -3,13 +3,13 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-03-01 11:59:56
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-03-01 14:46:22
+ * @LastEditTime: 2024-03-01 18:50:03
  * @FilePath: /student-sys/src/entities/propertyHelper.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 
 
-export type props<T extends object> = (keyof T)[]
+export type props<T extends object> = Array<keyof T>
 
 /**
  * 挑捡出需要的属性，形成新对象
