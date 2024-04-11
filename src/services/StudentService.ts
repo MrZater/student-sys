@@ -2,7 +2,7 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-02-07 11:52:07
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-03-01 18:50:07
+ * @LastEditTime: 2024-04-11 19:37:32
  * @FilePath: /student-sys/src/services/StudentService.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -15,13 +15,41 @@ import { ICommonFun } from "./IService";
 import ClassSchema from "../models/Class";
 import validate from 'validate.js'
 import { studentValidator } from "../entities/validate";
-import {pick, props} from '../util/propertyHelper'
+import { pick, props } from '../util/propertyHelper'
+import { plainToClass, Type } from "class-transformer";
+import { IsArray, isNotEmpty, IsNotEmpty } from "class-validator";
+import BaseEntities from "./BaseEntities";
 
 /**
  * 学生列表项接口
  */
 interface IStudentListItem extends Student {
     class: Class
+}
+
+class stndentConditionType extends BaseEntities<stndentConditionType> {
+    @IsNotEmpty({ message: '页容量不能为空' })
+    @Type(() => Number)
+    public limit: number
+
+    @IsNotEmpty({ message: '页码不能为空' })
+    @Type(() => Number)
+    public page: number
+
+    @Type(() => Number)
+    public sex: 0 | -1
+
+    @Type(() => String)
+    public name: string
+
+    /**
+     *  将一个平面对象转化成movie对象
+     * @param plainObject 平面对象
+     * @returns movie对象
+     */
+    public static transform(plainObject: object): stndentConditionType {
+        return super.baseTransform(stndentConditionType, plainObject)
+    }
 }
 
 class StudentService implements ICommonFun<Student> {
@@ -32,6 +60,11 @@ class StudentService implements ICommonFun<Student> {
      * @returns 
      */
     async add(student: Student) {
+        student = Student.transform(student)
+        const result = await student.validateThis()
+        if (result.length > 0) {
+            return result
+        }
         student = pick(student, ['name', 'address', 'mobile', 'sex', 'birthday', 'classId'])
         await validate.async(student, studentValidator)
         const ins = await StudentSchema.create(student)
@@ -61,15 +94,29 @@ class StudentService implements ICommonFun<Student> {
      * @returns 
      */
     async update(id, student) {
+        student = Student.transform(student)
+        const result = await student.validateThis()
+        if (result.length > 0) {
+            return result
+        }
         student = pick(student, ['name', 'address', 'mobile', 'sex', 'birthday', 'classId'])
-        await validate.async(student, studentValidator)
-        // 直接修改
-        const result = await StudentSchema.update(student, {
-            where: {
-                id
+        try {
+            await validate.async(student, studentValidator)
+            // 直接修改
+            const resp = await StudentSchema.update(student, {
+                where: {
+                    id
+                }
+            })
+            if (resp[0] === 0) {
+                return ['修改失败！']
             }
-        })
-        return result
+            return ['修改成功！']
+        } catch (err) {
+            console.log(123)
+            return err
+        }
+
     }
     /**
      * 学生列表查询
@@ -79,10 +126,16 @@ class StudentService implements ICommonFun<Student> {
      * @param name 
      * @returns 
      */
-    async getStudents(page: number = 1, limit: number = 10, sex: number = -1, name: string = ''): Promise<{
+    async getStudents(condition): Promise<{
         total: number,
         items: Array<IStudentListItem>
-    }> {
+    } | string[]> {
+        const c = stndentConditionType.transform(condition)
+        const result = await c.validateThis()
+        if (result.length) {
+            return result
+        }
+        const { sex = -1, name = '', page = 1, limit = 10 } = c
         // 指定查询字段
         const attributes: props<Student> = ['id', 'name', 'address', 'birthday', 'mobile', 'sex', 'age']
         // 指定查询条件
@@ -118,7 +171,7 @@ class StudentService implements ICommonFun<Student> {
      * @param id 
      * @returns 
      */
-    async getStudentById(id: number): Promise<IStudentListItem | null> {
+    async getStudentById(id: number | string): Promise<IStudentListItem | null> {
         const resp = await StudentSchema.findOne({
             where: {
                 id

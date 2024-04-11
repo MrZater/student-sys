@@ -2,7 +2,7 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-02-07 14:29:44
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-02-07 16:26:11
+ * @LastEditTime: 2024-04-10 18:08:51
  * @FilePath: /student-sys/src/spider/fetchBooks.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -12,7 +12,6 @@
 import axios from "axios";
 import Cheerio from "cheerio";
 import Book from "../models/Book";
-import { IBook } from "../models/ICommon";
 
 async function getBooksHtml() {
     const resp = await axios.get("https://book.douban.com/latest");
@@ -81,7 +80,7 @@ async function saveBookDetailToDb() {
             publishDate: new Date(book.publishDate) || new Date(),
         }
     })
-    Book.bulkCreate(b)
+    Book.bulkCreate(b as any)
     console.log('抓去并保存成功');
 }
 

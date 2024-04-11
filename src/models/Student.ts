@@ -2,7 +2,7 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-02-06 16:38:43
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-03-01 18:19:49
+ * @LastEditTime: 2024-04-10 17:46:17
  * @FilePath: /student-sys/src/models/Student.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -11,7 +11,7 @@ import { sequelize } from './db'
 import { Student, IStudentModel } from '../entities/ICommon'
 
 // 模型字段
-const attributes: ModelAttributes<IStudentModel, Student> = {
+const attributes: Omit<ModelAttributes<IStudentModel, Student>, 'validateThis'> = {
     name: {
         type: DataTypes.STRING,
         allowNull: false
@@ -58,6 +58,6 @@ const options: ModelOptions = {
     paranoid: true
 }
 
-const StudentSchema = sequelize.define<IStudentModel>('student', attributes, options)
+const StudentSchema = sequelize.define<IStudentModel>('student', attributes as any, options)
 export default StudentSchema
 
