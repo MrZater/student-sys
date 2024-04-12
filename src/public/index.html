@@ -2,20 +2,36 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-04-10 12:03:07
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-04-10 12:15:43
+ * @LastEditTime: 2024-04-12 18:58:16
  * @FilePath: /student-sys/src/public/index.html
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="./index.css"></link>
+    <link rel="stylesheet" href="./index.css">
+    </link>
 </head>
+
 <body>
-    <div class="test">test</div>
+    <div class="test">login</div>
+    <form action="/api/admin/login" method="post">
+        <p>
+            <input type="text" name="loginId" />
+        </p>
+        <p>
+            <input type="text" name="loginPwd" />
+
+        </p>
+        <p>
+            <button>登录</button>
+        </p>
+    </form>
     <script src="./index.js"></script>
 </body>
+
 </html>

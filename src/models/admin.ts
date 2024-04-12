@@ -2,7 +2,7 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-02-06 15:03:24
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-02-29 18:52:52
+ * @LastEditTime: 2024-04-12 17:53:24
  * @FilePath: /student-sys/src/models/admin.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -11,7 +11,7 @@ import { DataTypes, ModelAttributes, ModelOptions, Model } from 'sequelize'
 import { Admin, IAdminModel } from "../entities/ICommon";
 
 // 模型字段
-const attributes: ModelAttributes<IAdminModel, Admin> = {
+const attributes: Omit<ModelAttributes<IAdminModel, Admin>, 'validateThis'> = {
     loginId: {
         type: DataTypes.STRING,
         allowNull: false
@@ -36,6 +36,6 @@ const options: ModelOptions = {
     paranoid: true
 }
 
-const AdminSchema = sequelize.define<IAdminModel, Admin>('admin', attributes, options)
+const AdminSchema = sequelize.define<IAdminModel, Admin>('admin', attributes as any, options)
 
 export default AdminSchema

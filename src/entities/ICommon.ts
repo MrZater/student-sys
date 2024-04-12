@@ -2,7 +2,7 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-02-06 17:25:41
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-04-11 19:19:39
+ * @LastEditTime: 2024-04-12 17:47:18
  * @FilePath: /student-sys/src/models/ICommon.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -12,11 +12,31 @@ import { Model } from 'sequelize'
 import BaseEntities from '../services/BaseEntities'
 
 // 管理员
-export class Admin {
+export class Admin extends BaseEntities<Admin>{
+    @IsNotEmpty({ message: '管理员姓名不能为空' })
+    @Type(() => String)
+    @MaxLength(10, { message: '管理员姓名不能超过10个字符' })
     public name: string
+
+    @IsNotEmpty({ message: '登录账号不能为空' })
+    @Type(() => String)
+    @MaxLength(10, { message: '登录账号不能超过16个字符' })
     public loginId: string
+
+    @IsNotEmpty({ message: '登录密码不能为空' })
+    @Type(() => String)
+    @MaxLength(16, { message: '登录密码不能超过16个字符' })
     public loginPwd: string
+
     public id?: number
+    /**
+     *  将一个平面对象转化成movie对象
+     * @param plainObject 平面对象
+     * @returns movie对象
+     */
+    public static transform(plainObject: object): Admin {
+        return super.baseTransform(Admin, plainObject)
+    }
 }
 export interface IAdminModel extends Model<Admin>, Admin { }
 

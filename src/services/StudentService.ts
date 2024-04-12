@@ -2,7 +2,7 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-02-07 11:52:07
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-04-11 19:37:32
+ * @LastEditTime: 2024-04-12 19:24:53
  * @FilePath: /student-sys/src/services/StudentService.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -28,11 +28,9 @@ interface IStudentListItem extends Student {
 }
 
 class stndentConditionType extends BaseEntities<stndentConditionType> {
-    @IsNotEmpty({ message: '页容量不能为空' })
     @Type(() => Number)
     public limit: number
 
-    @IsNotEmpty({ message: '页码不能为空' })
     @Type(() => Number)
     public page: number
 
@@ -94,6 +92,9 @@ class StudentService implements ICommonFun<Student> {
      * @returns 
      */
     async update(id, student) {
+        if(!student.classId){
+            student.classId = undefined
+        }
         student = Student.transform(student)
         const result = await student.validateThis()
         if (result.length > 0) {

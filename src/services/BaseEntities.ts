@@ -2,11 +2,11 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-04-10 16:53:45
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-04-11 19:15:41
+ * @LastEditTime: 2024-04-12 10:40:01
  * @FilePath: /student-sys/src/services/BaseEntities.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
-import { ClassConstructor, plainToClass } from "class-transformer"
+import { ClassConstructor, ClassTransformOptions, plainToClass } from "class-transformer"
 import { validate } from "class-validator"
 
 abstract class BaseEntities<T> {
@@ -34,7 +34,10 @@ abstract class BaseEntities<T> {
     */
     protected static baseTransform<T>(cls: ClassConstructor<T>, plainObject: object): T {
         if (plainObject instanceof cls) return plainObject
-        return plainToClass(cls, plainObject)
+        const options: ClassTransformOptions = {
+            enableImplicitConversion: false, // 禁用隐式转换
+        };
+        return plainToClass(cls, plainObject, options)
     }
 
 }
