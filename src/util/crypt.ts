@@ -23,3 +23,5 @@ export default class Crypt {
     }
 }
 
+const a = new Crypt().encrypt('123')
+console.log(a)

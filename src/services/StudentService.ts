@@ -2,7 +2,7 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-02-07 11:52:07
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-04-15 15:30:21
+ * @LastEditTime: 2024-04-15 18:59:50
  * @FilePath: /student-sys/src/services/StudentService.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -25,6 +25,8 @@ import BaseEntities from "./BaseEntities";
 interface IStudentListItem extends Student {
     class: Class
 }
+// 联查获取班级的属性
+const classArrts:props<Class> = ['name', 'id', 'openDate']
 class StndentConditionType extends BaseEntities<StndentConditionType> {
     @Type(() => Number)
     public limit: number
@@ -157,7 +159,12 @@ class StudentService implements ICommonFun<Student> {
             where: whereObj,
             attributes,
             // 联查
-            include: [ClassSchema]
+            include: [
+                {
+                    model: ClassSchema,
+                    attributes: classArrts
+                }
+            ]
         })
         return {
             total: resp.count,
@@ -174,7 +181,12 @@ class StudentService implements ICommonFun<Student> {
             where: {
                 id
             },
-            include: [ClassSchema]
+            include: [
+                {
+                    model: ClassSchema,
+                    attributes: classArrts
+                }
+            ]
         })
         if (resp) {
             return resp.toJSON() as IStudentListItem
