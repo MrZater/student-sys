@@ -2,7 +2,7 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-02-06 17:25:41
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-04-12 17:47:18
+ * @LastEditTime: 2024-04-15 15:21:00
  * @FilePath: /student-sys/src/models/ICommon.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -46,7 +46,7 @@ export class Book {
     name: string
     imgurl: string
     author: string
-    publishDate: String
+    publishDate: string
     id?: number
 }
 export interface IBookModel extends Model<Book>, Book { }
@@ -55,7 +55,7 @@ export interface IBookModel extends Model<Book>, Book { }
 // 班级
 export class Class {
     name: string
-    openDate: String
+    openDate: string
     id?: number
 }
 export interface IClassModel extends Model<Class>, Class { }
@@ -69,7 +69,7 @@ export class Student extends BaseEntities<Student> {
 
     @IsNotEmpty({ message: '学生生日不能为空' })
     @Type(() => String)
-    public birthday: String
+    public birthday: string
 
     @IsNotEmpty({ message: '学生性别不能为空' })
     @Type(() => Boolean)

@@ -2,7 +2,7 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-04-10 11:18:15
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-04-11 16:47:30
+ * @LastEditTime: 2024-04-15 15:49:18
  * @FilePath: /student-sys/src/routes/responseType.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -24,12 +24,12 @@ export default class ResponseHelpers {
         const successResponse: SuccessResponse = {
             code: 200,
             message: 'success',
-            data: data
+            data
         }
         res.status(200).send(successResponse)
     }
     // 捕获错误辅助方法
-    public static catchHelper(handler: Function) {
+    public static catchHelper(handler: (Request, Response, NextFunction) => void) {
         return async (req: Request, res: Response, next: NextFunction) => {
             try {
                 await handler(req, res, next)

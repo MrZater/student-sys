@@ -3,7 +3,7 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-03-01 11:59:56
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-04-10 16:52:53
+ * @LastEditTime: 2024-04-15 15:51:18
  * @FilePath: /student-sys/src/entities/propertyHelper.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -11,7 +11,7 @@
 import { ClassConstructor, plainToClass } from "class-transformer"
 
 
-export type props<T extends object> = Array<keyof T>
+export type props<T extends object> = (keyof T)[]
 
 /**
  * 挑捡出需要的属性，形成新对象

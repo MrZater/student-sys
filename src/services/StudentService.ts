@@ -2,7 +2,7 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-02-07 11:52:07
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-04-12 19:24:53
+ * @LastEditTime: 2024-04-15 15:30:21
  * @FilePath: /student-sys/src/services/StudentService.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -16,8 +16,7 @@ import ClassSchema from "../models/Class";
 import validate from 'validate.js'
 import { studentValidator } from "../entities/validate";
 import { pick, props } from '../util/propertyHelper'
-import { plainToClass, Type } from "class-transformer";
-import { IsArray, isNotEmpty, IsNotEmpty } from "class-validator";
+import { Type } from "class-transformer";
 import BaseEntities from "./BaseEntities";
 
 /**
@@ -26,8 +25,7 @@ import BaseEntities from "./BaseEntities";
 interface IStudentListItem extends Student {
     class: Class
 }
-
-class stndentConditionType extends BaseEntities<stndentConditionType> {
+class StndentConditionType extends BaseEntities<StndentConditionType> {
     @Type(() => Number)
     public limit: number
 
@@ -45,8 +43,8 @@ class stndentConditionType extends BaseEntities<stndentConditionType> {
      * @param plainObject 平面对象
      * @returns movie对象
      */
-    public static transform(plainObject: object): stndentConditionType {
-        return super.baseTransform(stndentConditionType, plainObject)
+    public static transform(plainObject: object): StndentConditionType {
+        return super.baseTransform(StndentConditionType, plainObject)
     }
 }
 
@@ -114,7 +112,6 @@ class StudentService implements ICommonFun<Student> {
             }
             return ['修改成功！']
         } catch (err) {
-            console.log(123)
             return err
         }
 
@@ -129,9 +126,9 @@ class StudentService implements ICommonFun<Student> {
      */
     async getStudents(condition): Promise<{
         total: number,
-        items: Array<IStudentListItem>
+        items: IStudentListItem[]
     } | string[]> {
-        const c = stndentConditionType.transform(condition)
+        const c = StndentConditionType.transform(condition)
         const result = await c.validateThis()
         if (result.length) {
             return result
