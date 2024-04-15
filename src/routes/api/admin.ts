@@ -2,13 +2,14 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-04-10 15:10:56
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-04-12 18:50:57
+ * @LastEditTime: 2024-04-15 18:19:11
  * @FilePath: /student-sys/src/routes/api/student.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 import express, { NextFunction, Request, Response } from "express";
 import ResponseHelpers from "../responseHelpers";
 import AdminService from "../../services/AdminService";
+import Crypt from "../../util/crypt";
 
 const router = express.Router();
 
@@ -19,9 +20,15 @@ router.get('/', (req: Request, res: Response, nex: NextFunction) => {
 router.post('/login', ResponseHelpers.catchHelper(async (req: Request, res: Response, next: NextFunction) => {
     const { loginId = '', loginPwd = '' } = req.body
     const result = await AdminService.login(loginId, loginPwd)
-    if (result) {
+    if (result && result.id) {
+        const value = new Crypt().encrypt(result.id.toString())
         // 登录成功
-        res.header("set-cookie", `token=${result.name + loginId}; path=/; max-age=3600`)
+        res.cookie("token", value, {
+            path: '/',
+            domain: 'localhost',
+            maxAge: 1000 * 60 * 60 * 24,
+        })
+        res.header('authorization', value.toString())
         ResponseHelpers.sendSuccess(result, req, res, next)
     } else {
         ResponseHelpers.sendError('用户名或密码错误', req, res, next)

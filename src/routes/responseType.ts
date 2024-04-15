@@ -1,5 +1,5 @@
 export type ErrorResponse = {
-    code: 500
+    code: number
     message: string
 }
 
