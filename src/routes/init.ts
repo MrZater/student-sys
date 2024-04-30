@@ -2,7 +2,7 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-03-06 19:06:24
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-04-29 19:38:48
+ * @LastEditTime: 2024-04-30 17:16:13
  * @FilePath: /student-sys/src/routes/init.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -17,16 +17,24 @@ import class_ from './api/class'
 import cookieParser from 'cookie-parser'
 import TokenMiddleware from './tokenMiddleware'
 import corsMiddleware from 'cors'
+import session from 'express-session'
 const app: Express = express()
 // 错误处理中间件
 app.use(errorMiddleware)
+app.use(session({
+    name: 'sessionID',
+    // 客户端sessionID加密
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: true
+}))
 // 静态资源中间件
-app.use('/', static_(path.resolve(__dirname, '../public')))
 // 跨域中间件
-const whiteList = ['null']
+const whiteList = ['null', 'http://localhost:5008', 'undefined']
+app.use('/', static_(path.resolve(__dirname, '../public')))
 app.use(corsMiddleware({
     origin(origin, callback) {
-        if (origin && whiteList.includes(origin)) {
+        if (origin === undefined || origin && whiteList.includes(origin)) {
             callback(null, origin)
         } else {
             callback(new Error('Not allowed by CORS'))
@@ -52,7 +60,7 @@ app.use(apiPath.book, book)
 app.use(apiPath.admin, admin)
 app.use(apiPath.class, class_)
 
-const port = 3000
+const port = 5008
 app.listen(port, () => {
     console.log(`server is running at http://localhost:${port}`)
 })

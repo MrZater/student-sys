@@ -2,7 +2,7 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-04-10 15:10:56
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-04-12 16:46:47
+ * @LastEditTime: 2024-04-30 17:18:08
  * @FilePath: /student-sys/src/routes/api/student.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -56,9 +56,9 @@ router.delete('/:id', ResponseHelpers.catchHelper(async (req: Request, res: Resp
 
 router.put('/:id', ResponseHelpers.catchHelper(async (req:Request, res:Response, next: NextFunction) => {
     const result = await StudentService.update(req.params.id, req.body)
-    if (Array.isArray(result)) {
+        if (Array.isArray(result)) {
         ResponseHelpers.sendError(result, req, res, next)
-    } else if (result instanceof Object) {
+    } else if (result instanceof Object || typeof result === 'string') {
         ResponseHelpers.sendSuccess(result, req, res, next)
     } else {
         ResponseHelpers.sendError(result, req, res, next)

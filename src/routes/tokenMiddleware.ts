@@ -2,7 +2,7 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-04-15 16:41:46
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-04-29 18:11:25
+ * @LastEditTime: 2024-04-30 17:28:34
  * @FilePath: /student-sys/src/routes/tokenMiddleware.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -30,24 +30,30 @@ export default class TokenMiddleware {
             next()
             return
         }
-        let token: string = req.cookies.token;
-        if (req.cookies && !token && req.headers.authorization) {
-            // 从authentication中获取token
-            token = req.headers.authorization;
-        }
-        if (!token) {
-            // 未通过认证
-            console.log('未通过认证')
-            TokenMiddleware.handleNonToken(req, res, next);
-            return
-        }
-        // 验证token
-        const userId = new Crypt().decrypt(token)
-        req['userId'] = userId
+        // let token: string = req.cookies.token;
+        // if (req.cookies && !token && req.headers.authorization) {
+        //     // 从authentication中获取token
+        //     token = req.headers.authorization;
+        // }
+        // if (!token) {
+        //     // 未通过认证
+        //     console.log('未通过认证')
+        //     TokenMiddleware.handleNonToken(req, res, next);
+        //     return
+        // }
+        // // 验证token
+        // const userId = new Crypt().decrypt(token)
+        // req['userId'] = userId
+        // req.session['loginUser']
         // AdminService.getAdminById(userId)
         // 验证通过
-        console.log('验证通过')
-        next()
+        if (req.session['loginUser']) {
+            console.log('验证通过')
+            next()
+        } else {
+            console.log('未通过认证')
+            TokenMiddleware.handleNonToken(req, res, next);
+        }
     }
 
     // 处理未认证情况
