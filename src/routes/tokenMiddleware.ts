@@ -2,7 +2,7 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-04-15 16:41:46
  * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-04-30 17:28:34
+ * @LastEditTime: 2024-05-06 16:55:59
  * @FilePath: /student-sys/src/routes/tokenMiddleware.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -10,9 +10,15 @@ import { NextFunction, Request, Response } from "express";
 import ResponseHelpers from "./responseHelpers";
 import { pathToRegexp } from "path-to-regexp";
 import Crypt from "../util/crypt";
+import jwt from "./jwt";
+import { JwtPayload } from 'jsonwebtoken'
 type ApiType = {
     path: string;
     method: 'GET' | 'POST' | 'PUT' | 'DELETE'
+}
+
+interface IPayload extends JwtPayload {
+    id: number;
 }
 
 export default class TokenMiddleware {
@@ -20,6 +26,7 @@ export default class TokenMiddleware {
         { method: 'POST', path: '/api/student' },
         { method: 'PUT', path: '/api/student/:id' },
         { method: 'GET', path: '/api/student' },
+        { method: 'GET', path: '/api/admin/whoami' },
     ]
     public static middleware(req: Request, res: Response, next: NextFunction) {
         const apis = TokenMiddleware.needTokenApi.filter((api) => {
@@ -30,24 +37,10 @@ export default class TokenMiddleware {
             next()
             return
         }
-        // let token: string = req.cookies.token;
-        // if (req.cookies && !token && req.headers.authorization) {
-        //     // 从authentication中获取token
-        //     token = req.headers.authorization;
-        // }
-        // if (!token) {
-        //     // 未通过认证
-        //     console.log('未通过认证')
-        //     TokenMiddleware.handleNonToken(req, res, next);
-        //     return
-        // }
-        // // 验证token
-        // const userId = new Crypt().decrypt(token)
-        // req['userId'] = userId
-        // req.session['loginUser']
-        // AdminService.getAdminById(userId)
+        const result: string | IPayload | undefined = jwt.verify(req) as IPayload
         // 验证通过
-        if (req.session['loginUser']) {
+        if (result) {
+            req['userId'] = result.id
             console.log('验证通过')
             next()
         } else {
