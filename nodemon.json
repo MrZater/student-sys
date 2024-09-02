@@ -2,6 +2,6 @@
     "env": {
         "NODE_ENV": "development"
     },
-    "watch": ["*.js","*.json"],
-    "ignore": ["package*.json","nodemoon.json", "public", "dist"]
+    "watch": ["*.js", "*.json"],
+    "ignore": ["package*.json", "client", "nodemoon.json", "public", "dist"]
 }

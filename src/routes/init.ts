@@ -1,8 +1,8 @@
 /*
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-03-06 19:06:24
- * @LastEditors: zt zhoutao@ydmob.com
- * @LastEditTime: 2024-05-06 16:18:10
+ * @LastEditors: zhoutao mrzater@163.com
+ * @LastEditTime: 2024-09-02 15:44:34
  * @FilePath: /student-sys/src/routes/init.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -18,7 +18,9 @@ import cookieParser from 'cookie-parser'
 import TokenMiddleware from './tokenMiddleware'
 import corsMiddleware from 'cors'
 import session from 'express-session'
+import history = require('connect-history-api-fallback')
 const app: Express = express()
+app.use(history())
 // 错误处理中间件
 app.use(errorMiddleware)
 app.use(session({
@@ -34,13 +36,14 @@ const whiteList = ['null', 'http://localhost:5008', 'undefined']
 app.use('/', static_(path.resolve(__dirname, '../public')))
 app.use(corsMiddleware({
     origin(origin, callback) {
-        if (origin === undefined) {
-            callback(null, '*')
-        } else if (origin && whiteList.includes(origin)) {
-            callback(null, origin)
-        } else {
-            callback(new Error('Not allowed by CORS'))
-        }
+        // if (origin === undefined) {
+        //     callback(null, '*')
+        // } else if (origin && whiteList.includes(origin)) {
+        //     callback(null, origin)
+        // } else {
+        //     callback(new Error('Not allowed by CORS'))
+        // }
+        callback(null, '*')
     },
     credentials: true
 }))
