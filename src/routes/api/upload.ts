@@ -2,7 +2,7 @@
  * @Author: zhoutao mrzater@163.com
  * @Date: 2024-10-29 18:36:29
  * @LastEditors: zhoutao mrzater@163.com
- * @LastEditTime: 2024-10-30 15:54:15
+ * @LastEditTime: 2024-10-30 17:29:49
  * @FilePath: /student-sys/src/routes/api/upload.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -11,15 +11,26 @@ import ResponseHelpers from '../responseHelpers';
 import multer from 'multer'
 import path from 'path';
 import { Jimp, BlendMode } from 'jimp'
-
+/**
+ * 
+ * @param waterFile 水印文件
+ * @param originFile 原图片
+ * @param targetFile 生成图片
+ * @param proportion 比例
+ * @param marginProportion 位置
+ */
 async function mark(waterFile, originFile, targetFile, proportion = 3, marginProportion = 0.01) {
+    // 得到水印和原图的Jimp实例
     const [water, origin] = await Promise.all([Jimp.read(waterFile), Jimp.read(originFile)])
+    // 水印比例
     const curProportion = origin.bitmap.width / water.bitmap.width
     water.scale(curProportion / proportion)
+    // 水印位置
     const right = origin.bitmap.width * marginProportion
     const bottom = origin.bitmap.height * marginProportion
     const x = origin.bitmap.width - water.bitmap.width - right
     const y = origin.bitmap.height - water.bitmap.height - bottom
+    // 合成并生成图片
     origin.composite(water, x, y, {
         opacitySource: 0.3,
         mode: BlendMode.SRC_OVER
@@ -28,9 +39,11 @@ async function mark(waterFile, originFile, targetFile, proportion = 3, marginPro
 }
 const router = express.Router();
 const storage = multer.diskStorage({
+    // 原图片存储
     destination: (req, file, cb) => {
         cb(null, path.resolve(__dirname, '../../public/origin'))
     },
+    // 文件名处理
     filename: (req, file, cb) => {
         cb(null, Date.now() + '-' + Math.random().toString(36).slice(-6) + path.extname(file.originalname))
     }
@@ -38,10 +51,13 @@ const storage = multer.diskStorage({
 const upload = multer({ 
     storage,
     limits: {
+        // 限制文件大小
         fileSize: 1024 * 1024 // 限制文件大小为5MB
     },
     fileFilter: (req, file, cb) => {
+        // 后缀名
         const extname = path.extname(file.originalname)
+        // 文件后缀名白名单
         const whiteList  = ['.jpg', '.jpeg', '.png', '.gif']
         if (whiteList.includes(extname)) {
             cb(null, true)
