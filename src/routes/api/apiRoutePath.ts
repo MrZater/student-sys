@@ -2,7 +2,7 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-04-10 15:10:30
  * @LastEditors: zhoutao mrzater@163.com
- * @LastEditTime: 2024-10-29 18:42:15
+ * @LastEditTime: 2024-10-30 12:28:23
  * @FilePath: /student-sys/src/routes/api/apiRoutePath.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -13,5 +13,6 @@ export enum apiPath {
     class = `${basePath}/class`,
     book = `${basePath}/book`,
     admin = `${basePath}/admin`,
-    upload = `${basePath}/upload`
+    upload = `${basePath}/upload`,
+    download = `${basePath}/download`,
 }

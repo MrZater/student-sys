@@ -2,7 +2,7 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-03-06 19:06:24
  * @LastEditors: zhoutao mrzater@163.com
- * @LastEditTime: 2024-10-29 18:43:46
+ * @LastEditTime: 2024-10-30 12:28:48
  * @FilePath: /student-sys/src/routes/init.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -15,6 +15,7 @@ import book from './api/book'
 import admin from './api/admin'
 import class_ from './api/class'
 import upload from './api/upload'
+import download from './api/download'
 import cookieParser from 'cookie-parser'
 import TokenMiddleware from './tokenMiddleware'
 import corsMiddleware from 'cors'
@@ -65,6 +66,7 @@ app.use(apiPath.book, book)
 app.use(apiPath.admin, admin)
 app.use(apiPath.class, class_)
 app.use(apiPath.upload, upload)
+app.use(apiPath.download, download)
 
 app.use(errorMiddleware)
 
