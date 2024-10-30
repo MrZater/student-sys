@@ -2,7 +2,7 @@
  * @Author: zt zhoutao@ydmob.com
  * @Date: 2024-03-06 19:06:24
  * @LastEditors: zhoutao mrzater@163.com
- * @LastEditTime: 2024-09-02 16:52:10
+ * @LastEditTime: 2024-10-29 18:43:46
  * @FilePath: /student-sys/src/routes/init.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -14,6 +14,7 @@ import student from './api/student'
 import book from './api/book'
 import admin from './api/admin'
 import class_ from './api/class'
+import upload from './api/upload'
 import cookieParser from 'cookie-parser'
 import TokenMiddleware from './tokenMiddleware'
 import corsMiddleware from 'cors'
@@ -22,7 +23,6 @@ import history = require('connect-history-api-fallback')
 const app: Express = express()
 app.use(history())
 // 错误处理中间件
-app.use(errorMiddleware)
 app.use(session({
     name: 'sessionID',
     // 客户端sessionID加密
@@ -64,6 +64,9 @@ app.use(apiPath.student, student)
 app.use(apiPath.book, book)
 app.use(apiPath.admin, admin)
 app.use(apiPath.class, class_)
+app.use(apiPath.upload, upload)
+
+app.use(errorMiddleware)
 
 const port = 5008
 app.listen(port, () => {

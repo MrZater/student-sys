@@ -1,1 +1,57 @@
-<!doctype html><html lang=""><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>client</title><script defer="defer" src="/js/chunk-vendors.25040dd1.js"></script><script defer="defer" src="/js/app.87d7d781.js"></script><link href="/css/chunk-vendors.549c22f2.css" rel="stylesheet"><link href="/css/app.a6795e0a.css" rel="stylesheet"></head><body><div id="app"></div></body></html>
+<!--
+ * @Author: zhoutao mrzater@163.com
+ * @Date: 2024-10-28 17:23:18
+ * @LastEditors: zhoutao mrzater@163.com
+ * @LastEditTime: 2024-10-30 10:15:02
+ * @FilePath: /student-sys/src/public/index.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <p>
+      <input type="text" name="a" />
+    </p>
+    <p>
+      <input type="file" name="img" accept="image/*" multiple />
+    </p>
+    <p>
+      <button>提交</button>
+    </p>
+    <img src="" alt="" />
+    <script>
+      function upload() {
+        const inpA = document.querySelector("[name=a]");
+        const inpFile = document.querySelector("[name=img]");
+        const img = document.querySelector("img");
+        const formData = new FormData(); //帮助你构建form-data格式的消息体
+        formData.append("a", inpA.value);
+        for (const file of inpFile.files) {
+          formData.append("img", file, file.name);
+        }
+
+        fetch("/api/upload", {
+          body: formData,
+          method: "POST",
+        })
+          .then((resp) => resp.json())
+          .then((resp) => {
+            console.log(resp);
+            if (!resp.data) {
+              //有错误
+              alert(resp.message);
+            } else {
+              img.src = resp.data;
+            }
+          });
+      }
+
+      document.querySelector("button").onclick = upload;
+    </script>
+  </body>
+</html>
